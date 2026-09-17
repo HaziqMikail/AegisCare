@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { Activity, Wallet, X, Loader2, ShieldCheck, Database } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Header({ account, connecting, onConnect, onDisconnect }) {
   const truncate = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -7,37 +8,33 @@ export default function Header({ account, connecting, onConnect, onDisconnect })
     <header className="header">
       <div className="header-inner">
         {/* Logo */}
-        <div className="logo">
-          <span className="logo-icon">⚕</span>
-          <span className="logo-text">Aegis<span className="logo-accent">Care</span></span>
+        <Link to="/" className="logo">
+          <div className="logo-icon-wrapper">
+            <Activity className="logo-icon-svg" />
+          </div>
+          <span className="logo-text">
+            Aegis<span className="logo-accent">Care</span>
+          </span>
+          <span className="badge badge-v2">V2.0</span>
+        </Link>
+
+        {/* Network & Protocol Status Badge */}
+        <div className="network-pill">
+          <span className="network-dot" />
+          <Database className="network-icon" />
+          <span className="network-text">BOT Chain Testnet (968)</span>
         </div>
 
-        {/* Portal Navigation */}
-        <nav className="portal-nav">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) => `nav-pill ${isActive ? "nav-pill--active" : ""}`}
-          >
-            <span className="nav-pill-icon">👤</span>
-            User Portal
-          </NavLink>
-          <NavLink
-            to="/admin"
-            className={({ isActive }) => `nav-pill ${isActive ? "nav-pill--admin-active" : ""}`}
-          >
-            <span className="nav-pill-icon">🛡</span>
-            Admin Portal
-          </NavLink>
-        </nav>
-
-        {/* Wallet Badge */}
+        {/* Wallet Connection */}
         <div className="wallet-area">
           {account ? (
             <div className="wallet-connected">
               <span className="wallet-dot" />
+              <Wallet className="wallet-icon-svg" />
               <span className="wallet-address">{truncate(account)}</span>
-              <button className="btn-disconnect" onClick={onDisconnect} title="Disconnect">✕</button>
+              <button className="btn-disconnect" onClick={onDisconnect} title="Disconnect Wallet">
+                <X className="icon-xs" />
+              </button>
             </div>
           ) : (
             <button
@@ -46,9 +43,13 @@ export default function Header({ account, connecting, onConnect, onDisconnect })
               disabled={connecting}
             >
               {connecting ? (
-                <><span className="spinner" /> Connecting…</>
+                <>
+                  <Loader2 className="spinner-icon" /> Connecting…
+                </>
               ) : (
-                <><span className="wallet-icon">🦊</span> Connect Wallet</>
+                <>
+                  <Wallet className="wallet-icon-svg" /> Connect Wallet
+                </>
               )}
             </button>
           )}
