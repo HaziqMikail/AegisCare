@@ -3,6 +3,7 @@ import { useWeb3 } from "./hooks/useWeb3";
 import Header from "./components/Header";
 import UserPortal from "./pages/UserPortal";
 import AdminPortal from "./pages/AdminPortal";
+import NotFound from "./pages/NotFound";
 import "./index.css";
 
 export default function App() {
@@ -27,10 +28,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<UserPortal account={account} contract={contract} />} />
           <Route path="/admin" element={<AdminPortal account={account} contract={contract} />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
 
         <footer className="footer">
-          <p>AegisCare · Powered by Gemini AI × BOT Chain Testnet · Chain ID: 968</p>
+          <p>AegisCare · Verifiable AI Pre-Triage · Chain ID: 968</p>
         </footer>
       </div>
     </BrowserRouter>

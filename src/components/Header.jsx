@@ -15,15 +15,8 @@ export default function Header({ account, connecting, onConnect, onDisconnect })
           <span className="logo-text">
             Aegis<span className="logo-accent">Care</span>
           </span>
-          <span className="badge badge-v2">V2.0</span>
+          <span className="badge badge-v2">V1.0</span>
         </Link>
-
-        {/* Network & Protocol Status Badge */}
-        <div className="network-pill">
-          <span className="network-dot" />
-          <Database className="network-icon" />
-          <span className="network-text">BOT Chain Testnet (968)</span>
-        </div>
 
         {/* Wallet Connection */}
         <div className="wallet-area">

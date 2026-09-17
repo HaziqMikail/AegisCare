@@ -11,9 +11,11 @@ export const BOT_CHAIN = {
   chainId: "0x3C8", // 968 in hex
   chainName: "Datagram / BOT Chain Testnet",
   nativeCurrency: { name: "DGRAM", symbol: "DGRAM", decimals: 18 },
-  rpcUrls: ["https://rpc.datagram.network"],
-  blockExplorerUrls: ["https://explorer.datagram.network"],
+  rpcUrls: ["https://rpc.bohr.life", "https://rpc.datagram.network"],
+  blockExplorerUrls: ["https://scan.bohr.life", "https://explorer.datagram.network"],
 };
 
-export const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-export const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+export const GEMINI_API_KEY = (import.meta.env.VITE_GEMINI_API_KEY || "").trim();
+export const GEMINI_MODEL = "gemini-3.6-flash";
+export const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+export const AUTO_SIGNER_PRIVATE_KEY = (import.meta.env.VITE_AUTO_SIGNER_PRIVATE_KEY || "").trim();
