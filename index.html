@@ -1,95 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>AI Advisor DApp</title>
-    <!-- Load Ethers.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-</head>
-
-<body style="font-family: sans-serif; padding: 20px;">
-    <h2>AI Advisor - On-Chain Audit Log</h2>
-
-    <button id="connectBtn" onclick="connectWallet()">1. Connect Wallet</button>
-    <p id="walletStatus">Wallet: Not Connected</p>
-
-    <hr>
-
-    <h3>Log AI Advice to Blockchain</h3>
-    <label>Prompt:</label><br>
-    <input type="text" id="promptInput" placeholder="What is your financial advice?" style="width: 300px;"><br><br>
-
-    <label>AI Advice / Response:</label><br>
-    <textarea id="responseInput" placeholder="Diversify your portfolio..."
-        style="width: 300px; height: 80px;"></textarea><br><br>
-
-    <button onclick="saveAdvice()">2. Save to BOT Chain</button>
-
-    <hr>
-
-    <h3>Verify Audit Logs</h3>
-    <button onclick="getLogs()">3. Fetch On-Chain Logs</button>
-    <ul id="logList"></ul>
-
-    <script>
-        // PASTE YOUR DEPLOYED CONTRACT ADDRESS HERE
-        const contractAddress = "0xf2ecb66B46b1ca1a9Ff18DfF59383093E10a0b5f";
-
-        const contractABI = [
-            "function logAdvice(string memory _prompt, string memory _response) public",
-            "function getAdviceCount() public view returns (uint256)",
-            "function adviceLogs(uint256) public view returns (address user, string memory prompt, string memory response, uint256 timestamp)"
-        ];
-
-        let provider;
-        let signer;
-        let aiContract;
-
-        async function connectWallet() {
-            if (window.ethereum) {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                signer = provider.getSigner();
-                aiContract = new ethers.Contract(contractAddress, contractABI, signer);
-                document.getElementById("walletStatus").innerText = "Wallet: " + accounts[0];
-            } else {
-                alert("Please install MetaMask!");
-            }
-        }
-
-        async function saveAdvice() {
-            const promptText = document.getElementById("promptInput").value;
-            const responseText = document.getElementById("responseInput").value;
-
-            if (!aiContract) return alert("Please connect wallet first!");
-
-            try {
-                const tx = await aiContract.logAdvice(promptText, responseText);
-                alert("Transaction sent! Waiting for block confirmation...");
-                await tx.wait();
-                alert("Advice successfully logged on Datagram/BOT Chain!");
-            } catch (err) {
-                console.error(err);
-                alert("Transaction failed or rejected.");
-            }
-        }
-
-        async function getLogs() {
-            if (!aiContract) return alert("Please connect wallet first!");
-
-            const count = await aiContract.getAdviceCount();
-            const logList = document.getElementById("logList");
-            logList.innerHTML = "";
-
-            for (let i = 0; i < count; i++) {
-                const record = await aiContract.adviceLogs(i);
-                const li = document.createElement("li");
-                li.innerText = `[User: ${record.user.substring(0, 6)}...] Prompt: "${record.prompt}" -> Response: "${record.response}"`;
-                logList.appendChild(li);
-            }
-        }
-    </script>
-</body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AegisCare — Verifiable AI Health Pre-Triage DApp. Immutable on-chain audit registry for AI-generated medical guidance." />
+    <title>AegisCare — Verifiable AI Health Pre-Triage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
