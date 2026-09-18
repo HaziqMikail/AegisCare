@@ -96,7 +96,7 @@ export default function UserPortal({ account, contract }) {
     <main className="portal-container">
       {/* Page Header */}
       <div className="portal-title-wrapper">
-        <h1 className="portal-title">AI Health Pre-Triage</h1>
+        <h1 className="portal-title" style={{ textAlign: 'center', fontSize: '2.5rem' }}>AI Health Pre-Triage</h1>
       </div>
 
       {/* Symptom Form Card */}
@@ -198,6 +198,6 @@ export default function UserPortal({ account, contract }) {
 
       {/* Neatly Organized Assessment Result Component */}
       {assessment && <AssessmentResult assessment={assessment} txHash={txHash} />}
-    </main>
+    </main >
   );
 }

@@ -124,3 +124,62 @@ A decentralized application (DApp) that acts as an immutable audit log for AI-ge
 * **Client-Side Hex Formatting & Secrets Security:**
   * Address variables must be wrapped as explicit string literals (`"0x..."`) to prevent JavaScript from parsing them as float numbers (`1.38e+48`).
   * `.env` contains API keys and private keys; must always be included in `.gitignore` before committing.
+
+---
+
+## 🛠️ Build Week Vol. 2 Revision List
+
+### 1. EVM & Smart Contracts
+
+* **Solidity Basics & Contract Architecture (`AIAdvisor.sol`)**:
+  * **Contract Structure**: Simple, efficient, non-upgradable storage contract designed for high-throughput audit logging.
+  * **State Variables & Structs**: `struct AdviceRecord` bundles patient address (`address user`), symptom input (`string prompt`), AI triage response (`string response`), and block creation time (`uint256 timestamp`).
+  * **Arrays**: `AdviceRecord[] public adviceLogs` acts as an append-only linear storage list.
+  * **Events**: `event AdviceLogged(address indexed user, string prompt, string response, uint256 timestamp)` emits indexed EVM logs for efficient off-chain indexing and event filtering.
+  * **Functions**: State-modifying function `logAdvice(string, string)` appends data and updates blockchain state; `view` function `getAdviceCount()` queries array length without gas costs.
+
+* **EVM Gas Mechanics**:
+  * **Gas Limit vs. Gas Price**: `gasLimit` sets the maximum computational units allowed for execution (e.g., `3,000,000`), while `gasPrice` defines the cost per gas unit in Gwei (1 Gwei = \(10^9\) wei).
+  * **Underpriced Transaction Failures**: EVM nodes reject transactions with insufficient tip/fee allocations (`transaction underpriced`). Fixed in AegisCare by overriding default estimates with `{ gasLimit: 3000000, gasPrice: ethers.utils.parseUnits("25", "gwei") }`.
+
+* **RPC Nodes & Testnets**:
+  * **Testnet vs. Mainnet**: Testnets (e.g., Datagram / BOT Chain Testnet, Chain ID `968`) mirror Mainnet EVM execution using risk-free test tokens (`DGRAM`/`BOT`) from faucets.
+  * **Custom RPC Thresholds**: Public RPC nodes (such as `https://rpc.bohr.life`) enforce custom fee floors (e.g., minimum 20 Gwei gas price threshold) to protect against spam attacks, requiring dApps to explicitly configure transaction parameters.
+
+---
+
+### 2. Web3 & Ethers.js
+
+* **Providers vs. Signers**:
+  * **Provider (`JsonRpcProvider` / `Web3Provider`)**: Read-only abstraction layer. Used for instant, zero-cost state reads (`getAdviceCount()`, `adviceLogs(i)`) directly from public RPC nodes without wallet connection.
+  * **Signer (`Wallet` / MetaMask Signer)**: Write-capable abstraction. Cryptographically signs state-changing transactions (`logAdvice()`) requiring gas fee payments.
+
+* **Wallet State & Injected Web3**:
+  * **Injected Provider Detection**: Interacts with `window.ethereum` provided by browser extensions (e.g., MetaMask).
+  * **Network & Account Event Handling**: Dynamically manages wallet connection status, network switches (verifying Chain ID `968` / `0x3C8`), and account change events (`accountsChanged`, `chainChanged`).
+
+---
+
+### 3. AI & Verifiable Output
+
+* **Prompt Guardrails**:
+  * **Deterministic Structure**: Standardized system prompt (`SYSTEM_PROMPT` in `src/prompts/geminiPrompt.js`) forcing Gemini 3.6 Flash to output strictly structured response sections (`Risk Level`, `Recommended Next Action`, `Clinical Guidance`, and `Medical Disclaimer`).
+  * **Clinical Safety**: Embedded disclaimers ensure AI output is strictly pre-triage guidance, mitigating hallucination and medical compliance risks.
+
+* **Verifiable AI Pattern**:
+  * **Off-Chain Processing + On-Chain Notarization**: Computations/LLM inference happen off-chain via Gemini REST API for speed and cost efficiency.
+  * **Tamper-Proof Audit Trail**: Cryptographic hashes of original symptom prompts and resulting AI assessments are immutably logged on-chain (`AIAdvisor.sol`), establishing an unalterable proof of record for clinical governance.
+
+---
+
+### 4. Full-Stack DApp Architecture
+
+* **React SPA Setup**:
+  * **Vite & React Router (v7)**: Fast modern SPA setup with dual routing layout:
+    * `/` (Patient Portal): Symptom entry, Gemini AI triage, and on-chain transaction notarization.
+    * `/admin` (Admin Audit Ledger): Compliance metrics dashboard, public audit ledger feed, and contract explorer link.
+    * `*` (NotFound): Fallback 404 error page.
+
+* **State Management & Auto-Sync**:
+  * **Live Polling**: Configurable background polling interval (12s timer via `setInterval`) in `/admin` to auto-fetch new on-chain logs dynamically without reloading the browser.
+  * **Real-Time Client Filters**: Instant search and filtering of audit logs by patient wallet address.

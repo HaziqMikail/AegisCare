@@ -121,6 +121,15 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
+## 🚀 Deployment
+
+| Network | Chain ID | Smart Contract Address | Block Explorer Link |
+|---|---|---|---|
+| **BOT Chain Testnet** | `968` (`0x3C8`) | `0xf2ecb66B46b1ca1a9Ff18DfF59383093E10a0b5f` | [View on Testnet Explorer](https://scan.bohr.life/address/0xf2ecb66B46b1ca1a9Ff18DfF59383093E10a0b5f) |
+| **BOT Chain Mainnet** | `Mainnet` | `Pending Mainnet Deployment` | [BOT Chain Mainnet Explorer](https://scan.botchain.ai/) |
+
+---
+
 ## 📜 Smart Contract Specification
 
 **`AIAdvisor.sol`** deployed on BOT Chain Testnet at [`0xf2ecb66B46b1ca1a9Ff18DfF59383093E10a0b5f`](https://scan.bohr.life/address/0xf2ecb66B46b1ca1a9Ff18DfF59383093E10a0b5f):
@@ -130,23 +139,25 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 pragma solidity ^0.8.19;
 
 contract AIAdvisor {
-    struct AdviceLog {
+    struct AdviceRecord {
         address user;
         string prompt;
         string response;
         uint256 timestamp;
     }
 
-    AdviceLog[] public adviceLogs;
+    AdviceRecord[] public adviceLogs;
+
+    event AdviceLogged(address indexed user, string prompt, string response, uint256 timestamp);
 
     function logAdvice(string memory _prompt, string memory _response) public {
-        adviceLogs.push(AdviceLog(msg.sender, _prompt, _response, block.timestamp));
+        adviceLogs.push(AdviceRecord(msg.sender, _prompt, _response, block.timestamp));
+        emit AdviceLogged(msg.sender, _prompt, _response, block.timestamp);
     }
 
     function getAdviceCount() public view returns (uint256) {
         return adviceLogs.length;
     }
-}
 ```
 
 ---
@@ -198,3 +209,24 @@ Build-Week-Hackathon/
 ## 📄 License
 
 This project is licensed under the **ISC License**.
+
+
+## Linkedin
+
+Excited to share my participation in the Build Week Vol. 2 Hackathon!
+
+
+
+It was an incredible experience stepping out of my comfort zone for my first solo hackathon, where I experimented with connecting AI outputs to blockchain verification on the BOT Chain. Building this project gave me a great hands-on introduction to smart contract deployment, Web3 integration using Ethers.js, and structuring prompt guardrails with the Gemini API.
+
+
+
+Working directly on the testnet also taught me a lot about EVM gas dynamics, like tuning gas settings to clear RPC node transaction thresholds, and gave me a clearer picture of how cryptography creates immutable logs to make AI guidance verifiable and tamper-proof.
+
+
+
+While I still have plenty to learn, I'm super grateful for the opportunity to sharpen my full-stack and Web3 skills along the way!
+
+
+
+#BuildWeek #BOTChain #AI #Web3 #Solidity #Cryptography #Learning

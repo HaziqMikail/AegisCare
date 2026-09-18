@@ -5,6 +5,7 @@ export const CONTRACT_ABI = [
   "function logAdvice(string memory _prompt, string memory _response) public",
   "function getAdviceCount() public view returns (uint256)",
   "function adviceLogs(uint256) public view returns (address user, string memory prompt, string memory response, uint256 timestamp)",
+  "event AdviceLogged(address indexed user, string prompt, string response, uint256 timestamp)",
 ];
 
 export const BOT_CHAIN = {
