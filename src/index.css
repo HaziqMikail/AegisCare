@@ -559,16 +559,32 @@ body {
 .footer { text-align: center; padding: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); background: var(--bg-card); }
 
 /* ---------- Mobile Responsive Breakpoints ---------- */
+@media (max-width: 768px) {
+  .date-buttons-group { width: 100%; overflow-x: auto; justify-content: flex-start; padding-bottom: 8px; }
+  .date-filter-bar { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .date-picker-wrapper { margin-left: 0; width: 100%; justify-content: center; }
+  .metrics-grid { grid-template-columns: 1fr; }
+  .admin-controls { flex-direction: column; align-items: stretch; }
+  .btn-refetch { width: 100%; justify-content: center; }
+  .admin-header-flex { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .live-badge-btn { align-self: flex-start; }
+}
+
 @media (max-width: 640px) {
-  .header-inner { padding: 0 14px; height: 58px; }
+  .header-inner { padding: 0 14px; height: auto; min-height: 58px; flex-wrap: wrap; gap: 10px; padding-top: 10px; padding-bottom: 10px; }
   .portal-container { padding: 20px 14px 40px; gap: 16px; }
   .portal-title { font-size: 20px; }
   .card { padding: 18px; }
   .btn-primary { width: 100%; }
   .card-footer-flex { flex-direction: column; align-items: stretch; }
   .field-hint { text-align: center; }
-  .metrics-grid { grid-template-columns: 1fr; }
-  .admin-controls { flex-direction: column; align-items: stretch; }
-  .btn-refetch { width: 100%; justify-content: center; }
   .tx-confirmed-bar { flex-direction: column; align-items: flex-start; }
+  .presets-wrapper { flex-direction: column; align-items: flex-start; }
+  .log-card-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .log-right-meta { width: 100%; justify-content: space-between; }
+  .assessment-card-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .wallet-area { width: 100%; display: flex; justify-content: flex-end; }
+  .btn-connect { width: 100%; justify-content: center; }
+  .wallet-gate { padding: 30px 16px; }
+  .wallet-gate-text { max-width: 100%; }
 }
