@@ -26,7 +26,7 @@ export default function App() {
         )}
 
         <Routes>
-          <Route path="/" element={<UserPortal account={account} contract={contract} />} />
+          <Route path="/" element={<UserPortal account={account} contract={contract} onConnect={connectWallet} connecting={connecting} />} />
           <Route path="/admin" element={<AdminPortal account={account} contract={contract} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

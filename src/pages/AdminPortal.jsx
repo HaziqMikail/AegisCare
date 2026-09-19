@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { ethers } from "ethers";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Database,
   Search,
@@ -9,7 +10,10 @@ import {
   X,
   ExternalLink,
   Loader2,
-  Radio
+  Radio,
+  ChevronLeft,
+  ChevronRight,
+  Calendar
 } from "lucide-react";
 import LogCard from "../components/LogCard";
 import { CONTRACT_ADDRESS, BOT_CHAIN } from "../constants";
@@ -23,6 +27,61 @@ export default function AdminPortal({ account, contract }) {
   const [searchAddr, setSearchAddr] = useState("");
   const [chainId, setChainId] = useState(968);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const getLocalYMD = (date = new Date()) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
+  const [filterDate, setFilterDate] = useState(getLocalYMD()); // Default to today
+  const [baseDate, setBaseDate] = useState(getLocalYMD());
+
+  const formatDateLabel = (dateStr) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    // Parse the date strictly from the string to avoid timezone shifting
+    const [y, m, d] = dateStr.split("-");
+    const target = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    target.setHours(0, 0, 0, 0);
+
+    if (target.getTime() === today.getTime()) return "Today";
+    if (target.getTime() === yesterday.getTime()) return "Yesterday";
+    return target.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
+  const visibleDates = [];
+  for (let i = -2; i <= 2; i++) {
+    const [y, m, d] = baseDate.split("-");
+    const temp = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    temp.setDate(temp.getDate() + i);
+    visibleDates.push(getLocalYMD(temp));
+  }
+
+  const shiftBaseDate = (days) => {
+    const [y, m, d] = baseDate.split("-");
+    const temp = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    temp.setDate(temp.getDate() + days);
+    setBaseDate(getLocalYMD(temp));
+
+    if (filterDate) {
+      const [fy, fm, fd] = filterDate.split("-");
+      const fTemp = new Date(parseInt(fy), parseInt(fm) - 1, parseInt(fd));
+      fTemp.setDate(fTemp.getDate() + days);
+      setFilterDate(getLocalYMD(fTemp));
+    }
+  };
+
+  const handleDatePick = (e) => {
+    const picked = e.target.value;
+    if (picked) {
+      setBaseDate(picked);
+      setFilterDate(picked);
+    }
+  };
 
   const fetchLogs = useCallback(async (isSilent = false) => {
     if (!isSilent) setLoading(true);
@@ -82,9 +141,21 @@ export default function AdminPortal({ account, contract }) {
     return () => clearInterval(interval);
   }, [autoRefresh, fetchLogs]);
 
-  const filtered = searchAddr.trim()
-    ? logs.filter((l) => l.user.toLowerCase().includes(searchAddr.trim().toLowerCase()))
-    : logs;
+  const filtered = logs.filter((l) => {
+    // Wallet address filter
+    if (searchAddr.trim() && !l.user.toLowerCase().includes(searchAddr.trim().toLowerCase())) {
+      return false;
+    }
+    // Date filter
+    if (filterDate) {
+      const logDate = new Date(l.timestamp * 1000);
+      const [fy, fm, fd] = filterDate.split("-");
+      const filterStart = new Date(parseInt(fy), parseInt(fm) - 1, parseInt(fd), 0, 0, 0, 0);
+      const filterEnd = new Date(parseInt(fy), parseInt(fm) - 1, parseInt(fd), 23, 59, 59, 999);
+      if (logDate < filterStart || logDate > filterEnd) return false;
+    }
+    return true;
+  });
 
   return (
     <main className="portal-container">
@@ -175,6 +246,53 @@ export default function AdminPortal({ account, contract }) {
             </>
           )}
         </button>
+      </div>
+
+      {/* Date Filter Bar */}
+      <div className="date-filter-bar">
+        <button className="date-nav-btn" onClick={() => shiftBaseDate(-1)} title="Previous Day">
+          <ChevronLeft className="icon-sm" />
+        </button>
+
+        <div className="date-buttons-group">
+          <AnimatePresence mode="popLayout">
+            {visibleDates.map((dateStr) => (
+              <motion.button
+                layout
+                initial={{ opacity: 0, scale: 0.8, x: filterDate && dateStr > filterDate ? 20 : -20 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                key={dateStr}
+                className={`date-label-btn ${filterDate === dateStr ? "date-label-btn--active" : ""}`}
+                onClick={() => {
+                  setFilterDate(filterDate === dateStr ? null : dateStr);
+                  setBaseDate(dateStr);
+                }}
+              >
+                <span>{formatDateLabel(dateStr)}</span>
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <button
+          className="date-nav-btn"
+          onClick={() => shiftBaseDate(1)}
+          title="Next Day"
+        >
+          <ChevronRight className="icon-sm" />
+        </button>
+
+        <div className="date-picker-wrapper">
+          <input 
+            type="date" 
+            className="date-picker-input" 
+            value={filterDate || ""} 
+            onChange={handleDatePick} 
+            title="Pick a specific date"
+          />
+        </div>
       </div>
 
       {/* Log Feed */}

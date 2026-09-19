@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-import { Stethoscope, Zap, Loader2, Cpu, Layers } from "lucide-react";
+import { Stethoscope, Zap, Loader2, Cpu, Layers, Wallet } from "lucide-react";
 import { GEMINI_ENDPOINT, CONTRACT_ADDRESS, CONTRACT_ABI, BOT_CHAIN, AUTO_SIGNER_PRIVATE_KEY } from "../constants";
 import { SAMPLE_PRESETS, buildGeminiRequestBody } from "../prompts/geminiPrompt";
 import AssessmentResult from "../components/AssessmentResult";
@@ -8,7 +8,7 @@ import AssessmentResult from "../components/AssessmentResult";
 const RPC_URL = BOT_CHAIN.rpcUrls[0];
 const CHAIN_CONFIG = { chainId: 968, name: "Datagram" };
 
-export default function UserPortal({ account, contract }) {
+export default function UserPortal({ account, contract, onConnect, connecting }) {
   const [symptoms, setSymptoms] = useState("");
   const [assessment, setAssessment] = useState("");
   const [status, setStatus] = useState("");
@@ -108,6 +108,30 @@ export default function UserPortal({ account, contract }) {
           </div>
         </div>
 
+        {/* Wallet Gate — show overlay if not connected */}
+        {!account && (
+          <div className="wallet-gate">
+            <div className="wallet-gate-icon-box">
+              <Wallet className="wallet-gate-icon" />
+            </div>
+            <p className="wallet-gate-title">Wallet Connection Required</p>
+            <p className="wallet-gate-text">Connect your wallet to access the AI pre-triage system and log assessments on-chain.</p>
+            <button
+              className="btn-primary"
+              onClick={onConnect}
+              disabled={connecting}
+            >
+              {connecting ? (
+                <><Loader2 className="spinner-icon" /> Connecting…</>
+              ) : (
+                <><Wallet className="icon-sm" /> Connect Wallet</>
+              )}
+            </button>
+          </div>
+        )}
+
+        {account && (
+          <>
         {/* Presets */}
         <div className="presets-wrapper">
           <span className="presets-label">Sample Inputs:</span>
@@ -193,6 +217,8 @@ export default function UserPortal({ account, contract }) {
           <div className={`status-msg ${step === "error" ? "status-error" : "status-success"}`}>
             {status}
           </div>
+        )}
+          </>
         )}
       </div>
 

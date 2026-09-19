@@ -61,7 +61,7 @@ export default function AssessmentResult({ assessment, txHash }) {
         ) {
           continue;
         } else {
-          detailLines.push(line.replace(/\*\*/g, ""));
+          detailLines.push(line);
         }
       }
     } catch (err) {
@@ -124,11 +124,47 @@ export default function AssessmentResult({ assessment, txHash }) {
             <span className="section-title">Clinical Assessment &amp; Guidance</span>
           </div>
           <div className="details-body">
-            {(parsed.details || parsed.raw || "").split("\n\n").map((para, idx) => (
-              <p key={idx} className="details-paragraph">
-                {para}
-              </p>
-            ))}
+            <ul className="details-list">
+              {(parsed.details || parsed.raw || "").split("\n\n").map((para, idx) => {
+                const text = para.trim();
+                if (!text) return null;
+
+                // Format **bold** text
+                const formatBold = (str) => {
+                  return str.split(/(\*\*.*?\*\*)/g).map((part, i) => {
+                    if (part.startsWith("**") && part.endsWith("**")) {
+                      return <strong key={i} style={{ color: "var(--text-primary)" }}>{part.slice(2, -2)}</strong>;
+                    }
+                    return part;
+                  });
+                };
+
+                // Check for bullets
+                if (text.startsWith("* ")) {
+                  return (
+                    <li key={idx} className="details-bullet">
+                      {formatBold(text.substring(2))}
+                    </li>
+                  );
+                }
+
+                // Check for headers (ends with colon)
+                if (text.endsWith(":") && text.split(" ").length < 8) {
+                  const isRedFlag = text.toLowerCase().includes("red flag");
+                  return (
+                    <div key={idx} className={`details-subtitle ${isRedFlag ? "text-red" : ""}`}>
+                      {formatBold(text)}
+                    </div>
+                  );
+                }
+
+                return (
+                  <p key={idx} className="details-paragraph">
+                    {formatBold(text)}
+                  </p>
+                );
+              })}
+            </ul>
           </div>
         </div>
 

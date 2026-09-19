@@ -149,3 +149,29 @@ const contractABI = [
 - [ ] Build User Portal (`/`): Symptom input, Gemini API call, and Ethers.js transaction execution with gas override `{ gasLimit: 3000000 }`.
 - [ ] Build Admin Portal (`/admin`): Complete ledger parser querying `getAdviceCount()` and reading `adviceLogs` array.
 - [ ] Add client-side search/filter on Admin Portal to inspect logs by wallet address.
+
+
+## Progress
+
+Here's your full checklist against the hackathon requirements:
+
+#,Requirement,Status,Notes
+1,Contract deployed on BOT Chain,✅,0xf2ecb66B... on Chain ID 968
+2,Live Website Link,⚠️,TODO: Need to buy a domain ($1–$1.50) and deploy
+3,GitHub Repository,✅,Repo exists with .sol and README
+4,README with Deployment section,✅,"Has testnet address + explorer link. Mainnet says ""Pending"""
+5,X Post tagging @BOTChain_ai,⚠️,"TODO: Need to create X account, post with tag"
+6,5 X posts in 30 days,⚠️,TODO: Need active X presence
+7,Mainnet Launch Announcement,⚠️,TODO: Need mainnet deploy + write-up
+8,BOT Chain branding on-site,✅,"Footer has ""Powered by BOT Chain (EVM)"" + links to botchain.ai and explorer"
+9,Wallet connect + main action works,✅,Connect → describe symptoms → AI assessment → on-chain log
+10,Can demo live without breaking,✅,Working end-to-end
+
+What's done (code-wise): Everything ✅
+
+What's left (non-code tasks):
+Buy a cheap domain and deploy (GitHub Pages or Vercel)
+Deploy contract to BOT Chain Mainnet and update README
+Create project X account — post about it tagging @BOTChain_ai + maintain 5 posts
+Publish mainnet launch announcement on your site or channel
+Your codebase is submission-ready. The remaining items are deployment and marketing tasks.
