@@ -132,92 +132,92 @@ export default function UserPortal({ account, contract, onConnect, connecting })
 
         {account && (
           <>
-        {/* Presets */}
-        <div className="presets-wrapper">
-          <span className="presets-label">Sample Inputs:</span>
-          <div className="presets-chips">
-            {SAMPLE_PRESETS.map((p, idx) => (
+            {/* Presets */}
+            <div className="presets-wrapper">
+              <span className="presets-label">Sample Inputs:</span>
+              <div className="presets-chips">
+                {SAMPLE_PRESETS.map((p, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="preset-chip"
+                    onClick={() => setSymptoms(p.text)}
+                    disabled={step === 1 || step === 2}
+                  >
+                    {p.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Textarea */}
+            <textarea
+              id="symptom-input"
+              className="symptom-textarea"
+              placeholder="Enter symptoms here..."
+              value={symptoms}
+              onChange={(e) => setSymptoms(e.target.value)}
+              disabled={step === 1 || step === 2}
+              rows={4}
+            />
+
+            <div className="card-footer-flex">
+              <span className="field-hint">
+                {symptoms.length < 10
+                  ? `${Math.max(0, 10 - symptoms.length)} more chars required`
+                  : `${symptoms.length} chars`}
+              </span>
+
               <button
-                key={idx}
-                type="button"
-                className="preset-chip"
-                onClick={() => setSymptoms(p.text)}
-                disabled={step === 1 || step === 2}
+                className={`btn-primary ${step === 1 || step === 2 ? "btn-loading" : ""}`}
+                onClick={runTriage}
+                disabled={!isReady || step === 1 || step === 2}
               >
-                {p.title}
+                {step === 1 && (
+                  <>
+                    <Loader2 className="spinner-icon" /> Querying AI…
+                  </>
+                )}
+                {step === 2 && (
+                  <>
+                    <Loader2 className="spinner-icon" /> Mining On-Chain…
+                  </>
+                )}
+                {(step === null || step === "done" || step === "error") && (
+                  <>
+                    <Zap className="icon-sm" /> Generate &amp; Log On-Chain
+                  </>
+                )}
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Textarea */}
-        <textarea
-          id="symptom-input"
-          className="symptom-textarea"
-          placeholder="Enter symptoms here..."
-          value={symptoms}
-          onChange={(e) => setSymptoms(e.target.value)}
-          disabled={step === 1 || step === 2}
-          rows={4}
-        />
-
-        <div className="card-footer-flex">
-          <span className="field-hint">
-            {symptoms.length < 10
-              ? `${Math.max(0, 10 - symptoms.length)} more chars required`
-              : `${symptoms.length} chars`}
-          </span>
-
-          <button
-            className={`btn-primary ${step === 1 || step === 2 ? "btn-loading" : ""}`}
-            onClick={runTriage}
-            disabled={!isReady || step === 1 || step === 2}
-          >
-            {step === 1 && (
-              <>
-                <Loader2 className="spinner-icon" /> Querying AI…
-              </>
-            )}
-            {step === 2 && (
-              <>
-                <Loader2 className="spinner-icon" /> Mining On-Chain…
-              </>
-            )}
-            {(step === null || step === "done" || step === "error") && (
-              <>
-                <Zap className="icon-sm" /> Generate &amp; Log On-Chain
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Loading Progress Animation Box */}
-        {(step === 1 || step === 2) && (
-          <div className="loading-progress-box">
-            <div className="step-indicators">
-              <div className={`step-dot ${step === 1 ? "step-dot--active" : "step-dot--done"}`}>
-                <Cpu className="icon-xs" />
-                <span>1. Gemini AI Analysis</span>
-              </div>
-              <div className="step-line" />
-              <div className={`step-dot ${step === 2 ? "step-dot--active" : ""}`}>
-                <Layers className="icon-xs" />
-                <span>2. Blockchain Mining</span>
-              </div>
             </div>
-            <div className="loading-bar-track">
-              <div className={`loading-bar-fill ${step === 2 ? "loading-bar-fill--step2" : ""}`} />
-            </div>
-            <p className="loading-status-text">{status}</p>
-          </div>
-        )}
 
-        {/* Error or Done Status */}
-        {(step === "done" || step === "error") && status && (
-          <div className={`status-msg ${step === "error" ? "status-error" : "status-success"}`}>
-            {status}
-          </div>
-        )}
+            {/* Loading Progress Animation Box */}
+            {(step === 1 || step === 2) && (
+              <div className="loading-progress-box">
+                <div className="step-indicators">
+                  <div className={`step-dot ${step === 1 ? "step-dot--active" : "step-dot--done"}`}>
+                    <Cpu className="icon-xs" />
+                    <span>1. Gemini AI Analysis</span>
+                  </div>
+                  <div className="step-line" />
+                  <div className={`step-dot ${step === 2 ? "step-dot--active" : ""}`}>
+                    <Layers className="icon-xs" />
+                    <span>2. Blockchain Mining</span>
+                  </div>
+                </div>
+                <div className="loading-bar-track">
+                  <div className={`loading-bar-fill ${step === 2 ? "loading-bar-fill--step2" : ""}`} />
+                </div>
+                <p className="loading-status-text">{status}</p>
+              </div>
+            )}
+
+            {/* Error or Done Status */}
+            {(step === "done" || step === "error") && status && (
+              <div className={`status-msg ${step === "error" ? "status-error" : "status-success"}`}>
+                {status}
+              </div>
+            )}
           </>
         )}
       </div>
