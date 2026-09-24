@@ -206,27 +206,4 @@ Build-Week-Hackathon/
 
 ---
 
-## 📄 License
 
-This project is licensed under the **ISC License**.
-
-
-## Linkedin
-
-Excited to share my participation in the Build Week Vol. 2 Hackathon!
-
-
-
-It was an incredible experience stepping out of my comfort zone for my first solo hackathon, where I experimented with connecting AI outputs to blockchain verification on the BOT Chain. Building this project gave me a great hands-on introduction to smart contract deployment, Web3 integration using Ethers.js, and structuring prompt guardrails with the Gemini API.
-
-
-
-Working directly on the testnet also taught me a lot about EVM gas dynamics, like tuning gas settings to clear RPC node transaction thresholds, and gave me a clearer picture of how cryptography creates immutable logs to make AI guidance verifiable and tamper-proof.
-
-
-
-While I still have plenty to learn, I'm super grateful for the opportunity to sharpen my full-stack and Web3 skills along the way!
-
-
-
-#BuildWeek #BOTChain #AI #Web3 #Solidity #Cryptography #Learning
