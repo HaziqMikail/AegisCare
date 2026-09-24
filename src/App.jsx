@@ -5,6 +5,7 @@ import UserPortal from "./pages/UserPortal";
 import AdminPortal from "./pages/AdminPortal";
 import NotFound from "./pages/NotFound";
 import "./index.css";
+import botchainLogo from "./assets/botchain.png";
 
 export default function App() {
   const { account, contract, connecting, error, connectWallet, disconnect } = useWeb3();
@@ -32,23 +33,31 @@ export default function App() {
         </Routes>
 
         <footer className="footer">
-          <div className="footer-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-            <p>AegisCare · Verifiable AI Pre-Triage · Chain ID: 968</p>
-            <div className="footer-branding" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <span>Powered by <strong>BOT Chain (EVM)</strong></span>
-              <span>•</span>
-              <a href="https://botchain.ai/" target="_blank" rel="noopener noreferrer" style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 600 }}>
-                botchain.ai ↗
+          <div className="footer-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <a href="https://botchain.ai/" target="_blank" rel="noopener noreferrer">
+                <img
+                  src={botchainLogo}
+                  alt="BOT Chain Logo"
+                  style={{ height: '50px', width: 'auto', objectFit: 'contain', cursor: 'pointer' }}
+                />
               </a>
-              <span>•</span>
-              <a href="https://scan.botchain.ai/" target="_blank" rel="noopener noreferrer" style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 600 }}>
-                BOT Chain Explorer ↗
-              </a>
-              <span>•</span>
-              <a href="https://scan.bohr.life" target="_blank" rel="noopener noreferrer" style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 600 }}>
-                Testnet Explorer ↗
-              </a>
-            </div>
+              Powered by <strong>BOT Chain (EVM)</strong>
+            </span>
+            <span>•</span>
+            <span>AegisCare · Verifiable AI Pre-Triage · Chain ID: 968</span>
+            <span>•</span>
+            <a href="https://botchain.ai/" target="_blank" rel="noopener noreferrer" style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 600 }}>
+              botchain.ai ↗
+            </a>
+            <span>•</span>
+            <a href="https://scan.botchain.ai/" target="_blank" rel="noopener noreferrer" style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 600 }}>
+              BOT Chain Explorer ↗
+            </a>
+            <span>•</span>
+            <a href="https://scan.bohr.life" target="_blank" rel="noopener noreferrer" style={{ color: '#4F46E5', textDecoration: 'none', fontWeight: 600 }}>
+              Testnet Explorer ↗
+            </a>
           </div>
         </footer>
       </div>
