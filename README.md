@@ -15,10 +15,10 @@
 
 When running locally (`npm run dev`), access the two application portals via the following routes:
 
-| Portal | Route Path | Local URL | Purpose |
+| Portal | Route Path | Local URL/host | Purpose |
 |---|---|---|---|
-| 🩺 **Patient User Portal** | `/` | [http://localhost:5173/](http://localhost:5173/) | Patient symptom input, Gemini 3.6 AI pre-triage assessment, and on-chain notarization |
-| 🛡️ **Admin Audit Ledger** | `/admin` | [http://localhost:5173/admin](http://localhost:5173/admin) | Global compliance metrics dashboard, public ledger inspection, live auto-sync, & wallet filtering |
+| 🩺 **Patient User Portal** | `/` | [http://localhost:5173/](http://localhost:5173/) @ https://aegis-care-three.vercel.app/admin| Patient symptom input, Gemini 3.6 AI pre-triage assessment, and on-chain notarization |
+| 🛡️ **Admin Audit Ledger** | `/admin` | [http://localhost:5173/admin](http://localhost:5173/admin) @ https://aegis-care-three.vercel.app | Global compliance metrics dashboard, public ledger inspection, live auto-sync, & wallet filtering |
 
 ---
 
